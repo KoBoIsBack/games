@@ -142,7 +142,16 @@
   <data name="cat8" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\cat8.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="memorygame" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\memorygame.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\question.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="snakegame" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\snakegame.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tictactoe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tictactoe.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

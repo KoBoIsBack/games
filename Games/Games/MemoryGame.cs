@@ -2,7 +2,6 @@ using Microsoft.VisualBasic;
 using System;
 using System.Drawing;
 using System.Linq;
-using System.Security.AccessControl;
 using System.Windows.Forms;
 using Timer = System.Timers.Timer;
 
@@ -11,9 +10,10 @@ namespace Games
     public partial class MemoryGame : Form
     {
         bool allowClick = false;
-        PictureBox firstGuess;
+        PictureBox? firstGuess;
         Random rnd = new Random();
         Timer clickTimer = new Timer();
+        Timer revealTimer = new Timer();
         int time = 60;
         Timer timer = new Timer { Interval = 1000 };
         PictureBox[] pictureBoxs;
@@ -22,6 +22,8 @@ namespace Games
         {
             InitializeComponent();
             pictureBoxs = Controls.OfType<PictureBox>().ToArray();
+            revealTimer.Interval = 3000; // Show images for 5 seconds at the start
+            revealTimer.Elapsed += revealTimer_Tick;
         }
 
         private static IEnumerable<Image> images
@@ -61,9 +63,16 @@ namespace Games
                 {
                     label1.Text = $"{time / 60:00}:{time % 60:00}";
                 }));
-
-
             };
+        }
+
+        private void StopGame()
+        {
+            timer.Stop();
+            clickTimer.Stop();
+            revealTimer.Stop();
+            buttonStart.Enabled = true;
+            allowClick = false;
         }
 
         private void ResetImages()
@@ -75,9 +84,6 @@ namespace Games
             }
 
             HideImages();
-            setRandomImages();
-            time = 60;
-            timer.Start();
         }
 
         private void HideImages()
@@ -87,17 +93,19 @@ namespace Games
                 pic.Image = Game.Properties.Resources.question;
             }
         }
+
         private PictureBox getFreeSlot()
         {
             int num;
 
             do
             {
-                num = rnd.Next(0, pictureBoxs.Count());
+                num = rnd.Next(0, pictureBoxs.Length);
             }
             while (pictureBoxs[num].Tag != null);
             return pictureBoxs[num];
         }
+
         private void setRandomImages()
         {
             foreach (var image in images)
@@ -132,10 +140,7 @@ namespace Games
             if (pic.Image == firstGuess.Image && pic != firstGuess)
             {
                 pic.Visible = firstGuess.Visible = false;
-                {
-                    firstGuess = pic;
-                }
-                HideImages();
+                firstGuess = null;
             }
             else
             {
@@ -145,19 +150,52 @@ namespace Games
 
             firstGuess = null;
             if (pictureBoxs.Any(p => p.Visible)) return;
-            MessageBox.Show("You Win Now Try Again");
+            StopGame();
+            MessageBox.Show("You Win! Now Try Again");
             ResetImages();
         }
 
         private void startGame(object sender, EventArgs e)
         {
-            allowClick = true;
             setRandomImages();
-            HideImages();
-            startGameTimer();
+            foreach (var pic in pictureBoxs)
+            {
+                pic.Image = (Image)pic.Tag; // Reveal the image
+            }
+
+            time = 60; // Reset the timer
+            allowClick = false; // Prevent interaction during memorization phase
+            revealTimer.Start(); // Start the timer to hide the images after the interval
+
             clickTimer.Interval = 1000;
             clickTimer.Elapsed += CLICKTIMER_TICK;
             buttonStart.Enabled = false;
         }
+
+        private void revealTimer_Tick(object sender, EventArgs e)
+        {
+            HideImages();
+            allowClick = true;
+            revealTimer.Stop();
+            startGameTimer();
+        }
+
+        private void MemoryGame_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            timer.Stop();
+            timer.Dispose();
+            clickTimer.Stop();
+            clickTimer.Dispose();
+            revealTimer.Stop();
+            revealTimer.Dispose();
+        }
+
+
     }
 }

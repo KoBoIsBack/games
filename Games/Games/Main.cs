@@ -19,7 +19,7 @@ namespace Games
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void MemoryGameBtn_Click(object sender, EventArgs e)
         {
             // Open the game form
             MemoryGame game = new MemoryGame();
@@ -28,7 +28,7 @@ namespace Games
             this.Hide();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void SnakeGameBtn_Click(object sender, EventArgs e)
         {
             // Open snake game
             SnakeGame snake = new SnakeGame();
@@ -37,7 +37,7 @@ namespace Games
             this.Hide();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void TicTacToeBtn_Click(object sender, EventArgs e)
         {
             // Open tic tac toe game
             TicTacToeGame tiktoe = new TicTacToeGame();
