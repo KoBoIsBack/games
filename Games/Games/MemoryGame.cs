@@ -77,22 +77,36 @@ namespace Games
 
         private void ResetImages()
         {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(ResetImages));
+                return;
+            }
+
             foreach (var pic in pictureBoxs)
             {
                 pic.Tag = null;
-                pic.Visible = true;
+                pic.BorderStyle = BorderStyle.None;
+                pic.BackColor = default(Color); // Reset color to default
+                pic.Image = Game.Properties.Resources.question;
             }
 
             HideImages();
         }
 
+
         private void HideImages()
         {
             foreach (var pic in pictureBoxs)
             {
-                pic.Image = Game.Properties.Resources.question;
+                // Check if the PictureBox is not part of a matched pair
+                if (pic.BackColor != Color.LimeGreen)
+                {
+                    pic.Image = Game.Properties.Resources.question;
+                }
             }
         }
+
 
         private PictureBox getFreeSlot()
         {
@@ -126,8 +140,10 @@ namespace Games
         private void clickImage(object sender, EventArgs e)
         {
             if (!allowClick) return;
+            if (firstGuess != null && firstGuess == sender) return;
 
             var pic = (PictureBox)sender;
+            if (pic != null && pic.BorderStyle == BorderStyle.FixedSingle) return;
 
             if (firstGuess == null)
             {
@@ -139,7 +155,12 @@ namespace Games
             pic.Image = (Image)pic.Tag;
             if (pic.Image == firstGuess.Image && pic != firstGuess)
             {
-                pic.Visible = firstGuess.Visible = false;
+                // Instead of making the PictureBoxes invisible, indicate a match by changing the border
+                pic.BorderStyle = BorderStyle.FixedSingle;
+                firstGuess.BorderStyle = BorderStyle.FixedSingle;
+                pic.BackColor = Color.LimeGreen; // Indicate a match
+                firstGuess.BackColor = Color.LimeGreen; // Indicate a match
+
                 firstGuess = null;
             }
             else
@@ -149,11 +170,12 @@ namespace Games
             }
 
             firstGuess = null;
-            if (pictureBoxs.Any(p => p.Visible)) return;
+            if (pictureBoxs.Any(p => p.Visible && p.BorderStyle != BorderStyle.FixedSingle)) return;
             StopGame();
             MessageBox.Show("You Win! Now Try Again");
             ResetImages();
         }
+
 
         private void startGame(object sender, EventArgs e)
         {
@@ -163,7 +185,7 @@ namespace Games
                 pic.Image = (Image)pic.Tag; // Reveal the image
             }
 
-            time = 60; // Reset the timer
+            time = 10; // Reset the timer
             allowClick = false; // Prevent interaction during memorization phase
             revealTimer.Start(); // Start the timer to hide the images after the interval
 
