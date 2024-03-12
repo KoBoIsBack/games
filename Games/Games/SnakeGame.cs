@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using System.Drawing.Imaging; // add this for the JPG compressor
+using Games;
 
 namespace Classic_Snakes_Game
 {
@@ -87,11 +88,8 @@ namespace Classic_Snakes_Game
 
         private void ExitButton_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to exit?", "Exit Game", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-            {
-                Application.Exit(); // Излизане от приложението
-            }
+            new Main().Show();
+            this.Hide();
         }
 
 
@@ -280,7 +278,11 @@ namespace Classic_Snakes_Game
                 txtHighScore.TextAlign = ContentAlignment.MiddleCenter;
             }
         }
-
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            // Show the main form
+            new Main().Show();
+        }
 
     }
 }

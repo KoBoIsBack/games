@@ -216,6 +216,10 @@ namespace Games
             clickTimer.Dispose();
             revealTimer.Stop();
             revealTimer.Dispose();
+
+            // Show the main form
+            new Main().Show();
+            
         }
 
 

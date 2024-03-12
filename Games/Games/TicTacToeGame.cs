@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Games;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -317,6 +318,11 @@ namespace TicTacToe
                     System.Windows.Forms.Application.Exit();
                 }
             }
+        }
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            // Show the main form
+            new Main().Show();
         }
     }
 }
